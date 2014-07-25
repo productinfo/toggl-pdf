@@ -12,6 +12,7 @@ It just fetches the data from API and generates PDF from it.
 
 * Clone the repo `git clone git@github.com:toggl/toggl-pdf.git`
 * Install dependencies with `npm install`
+* Install CoffeeScript with `npm install -g coffee-script`
 
 ## PDF generation
 Generate PDF documents with following commands:   
