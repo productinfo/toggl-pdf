@@ -1,5 +1,7 @@
 # toggl-pdf
 
+[![Build Status](https://travis-ci.org/toggl/toggl-pdf.svg?branch=master)](https://travis-ci.org/toggl/toggl-pdf)
+
 [toggl-pdf](https://github.com/toggl/toggl-pdf) is a thin webapp for generating Toggl PDF documents. 
 It just fetches the data from API and generates PDF from it.
 
