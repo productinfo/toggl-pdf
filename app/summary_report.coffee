@@ -185,6 +185,9 @@ class SummaryReport extends Report
       @doc.fillColor('#6d6d6d').text durationFunc(group.time), 93 + labelWidth, cy - 6
       cy = cy + 20
 
+  getTitle = (title) ->
+    title or '(no title)'
+
   reportTable: ->
     @translate 0, 20
     @doc.fontSize(7)
@@ -210,10 +213,16 @@ class SummaryReport extends Report
 
       @doc.font 'FontRegular'
       for item in group.items
-        @doc.text item.title?.slice(0,90) or '(no title)', 60, 10, width: 330
+        lineHeight = 90
+        title      = getTitle item.title
+        lineCount  = title.length / lineHeight
+        @doc.text title, 60, 10, width: 330, lineCap: lineCount
         @doc.text durationFunc(item.time), 390, 10
         @doc.text item.sum.toFixed(2) + " " + item.cur, 450, 10 if item.sum? and item.sum > 0
         @translate 0, 20
+
+        # If the we have multiline description then lets move the lines down
+        @translate 0, lineCount * 9 if lineCount > 0
 
         if @posY > Report.PAGE_HEIGHT - Report.MARGIN_BOTTOM
           @doc.text ++@pageNum
