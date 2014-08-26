@@ -17,19 +17,26 @@ clean:
 	@rm *.pdf
 
 i:
-	@coffee --nodejs --stack_size=4096 test/test_invoice.coffee && open invoice.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && open invoice.pdf
 
 p:
-	@coffee --nodejs --stack_size=4096 test/test_payment.coffee && open payment.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_payment.coffee && open payment.pdf
 
 s:
-	@coffee --nodejs --stack_size=4096 test/test_summary.coffee && open summary.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_summary.coffee && open summary.pdf
 
 d:
-	@coffee --nodejs --stack_size=4096 test/test_detailed.coffee && open detailed.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_detailed.coffee && open detailed.pdf
 
 w:
-	@coffee --nodejs --stack_size=4096 test/test_weekly.coffee && open weekly.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && open weekly.pdf
+
+test: clean
+	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && file invoice.pdf | grep PDF && true
+	@coffee --nodejs --stack_size=4096 testdata/test_payment.coffee && file payment.pdf | grep PDF && true
+	@coffee --nodejs --stack_size=4096 testdata/test_summary.coffee && file summary.pdf | grep PDF && true
+	@coffee --nodejs --stack_size=4096 testdata/test_detailed.coffee && file detailed.pdf | grep PDF && true
+	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && file weekly.pdf | grep PDF && true
 
 rollout:
 	crap production1 && sleep 30 && crap production2
