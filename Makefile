@@ -14,7 +14,7 @@ dist_dir:
 	@if [ ! -d "dist" ]; then mkdir -p dist; fi
 
 clean:
-	@rm *.pdf
+	@rm -f *.pdf
 
 i:
 	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && open invoice.pdf
