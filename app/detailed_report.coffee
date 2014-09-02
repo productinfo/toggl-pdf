@@ -22,6 +22,15 @@ class DetailedReport extends Report
   fileName: ->
     'detailed-report'
 
+  getDescription = (description) ->
+    description or '(no description)'
+
+  calculateDuration: (duration) =>
+    timeFormatMode = @data.params?.time_format_mode
+    isDecimalFormat = timeFormatMode is 'decimal'
+    fn = if isDecimalFormat then @decimalDuration else @classicDuration
+    fn duration
+
   reportTable: ->
     @doc.font('FontBold').fontSize(7).fill('#6f7071')
     @doc.text 'Date', @LEFT, 1
@@ -29,22 +38,23 @@ class DetailedReport extends Report
     @doc.text 'Duration', 405, 1
     @doc.text 'User', 465, 1
     @translate 0, 5
-    
-    durationFunc = @classicDuration
-    if @data.params?['time_format_mode'] == 'decimal'
-      durationFunc = @decimalDuration
 
     @doc.fill('#000').strokeColor('#dde7f7')
     TSIZE = "2013-09-04T14:43:52".length
     for row, i in @data.data
-      start   = moment(row.start[...TSIZE])
-      @doc.font('FontBold')
+      start       = moment(row.start[...TSIZE])
+      description = getDescription row.description
+      lineCount   = description.length / 90
+      duration    = @calculateDuration row.dur
+      @doc.font 'FontBold'
       @doc.text "#{start.format('MM-DD')}", @LEFT, 7
-      #@doc.text row.description or '(no description)', 65, 7, width: 330, height: 22, lineGap: -1.5
-      @doc.text row.description?.slice(0, 90) or '(no description)', 65, 9, width: 330
-      @doc.text durationFunc(row.dur), 405, 7
-      @doc.font('FontRegular')
+      @doc.text description, 65, 9, { width: 330, lineCap: lineCount }
+      @doc.text duration, 405, 7
+      @doc.font 'FontRegular'
       @doc.text row.user, 465, 7, width: 120, height: 11
+
+      # If the we have multiline description then lets move the lines down
+      @translate 0, lineCount * 11 if lineCount > 0
 
       @doc.fontSize(7).fillColor 'grey'
       rowProject = if row.client? then "#{row.client} - " else ''
