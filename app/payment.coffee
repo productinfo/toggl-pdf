@@ -104,10 +104,16 @@ class Payment
   status: ->
     if @data.cancelled_at?
       cancelledAt = moment @data.cancelled_at
-      "Cancelled at: #{cancelledAt.format('MMMM D, YYYY')}"
+      if cancelledAt?
+        "Cancelled at: #{cancelledAt.format('MMMM D, YYYY')}"
+      else
+        "Cancelled at: #{@data.cancelled_at}"
     else if @data.captured_at?
       capturedAt = moment @data.captured_at
-      "Paid at: #{capturedAt.format('MMMM D, YYYY')}"
+      if capturedAt?
+        "Paid at: #{capturedAt.format('MMMM D, YYYY')}"
+      else
+        "Paid at: #{@data.captured_at}"
     else
       "Not paid"
 
