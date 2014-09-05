@@ -9,6 +9,7 @@ It just fetches the data from API and generates PDF from it.
 
 * Node.js - [http://nodejs.org](http://nodejs.org/)
 * CoffeeScript - [http://coffeescript.org/](http://coffeescript.org/)
+* FontForge - [http://fontforge.org/](http://fontforge.org/) (Only needed when you want to merge additional font)
 
 ## Getting Started
 
