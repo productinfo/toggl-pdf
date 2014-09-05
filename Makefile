@@ -38,5 +38,3 @@ test: clean
 	@coffee --nodejs --stack_size=4096 testdata/test_detailed.coffee && file detailed.pdf | grep PDF && true
 	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && file weekly.pdf | grep PDF && true
 
-rollout:
-	crap production1 && sleep 30 && crap production2
