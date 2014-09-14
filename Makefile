@@ -1,9 +1,18 @@
+FONTS_INPUT := $(wildcard app/fonts/*.ttf)
+FONTS_OUTPUT := $(patsubst app/%,dist/%, $(FONTS_INPUT))
+
+IMAGES_INPUT := $(wildcard app/images/*)
+IMAGES_OUTPUT := $(patsubst app/%,dist/%, $(IMAGES_INPUT))
+
+COFFEEFILES := $(wildcard app/*.coffee)
+OUTPUTJSFILES := $(patsubst app/%.coffee,dist/%.js, $(COFFEEFILES))
+
 default: s
 
 run:
 	@coffee --nodejs --stack_size=4096 app/server.coffee
 
-dist: dist_dir
+dist_old: dist_dir
 	@coffee -co dist app
 	@cp -R app/fonts dist/
 	@cp -R app/images dist/
@@ -12,6 +21,42 @@ dist: dist_dir
 
 dist_dir:
 	@if [ ! -d "dist" ]; then mkdir -p dist; fi
+
+release: $(IMAGES_OUTPUT) $(FONTS_OUTPUT) dist/package.json coffee node_modules
+	@echo > /dev/null
+
+node_modules: dist
+	@cd dist && npm install --silent
+
+coffee: $(OUTPUTJSFILES) dist/routes/index.coffee
+	@echo > /dev/null
+
+dist/%.js: app/%.coffee
+	coffee -co dist $<
+
+dist/routes/%.coffee: app/routes/%.coffee dist/routes
+	coffee -co dist/routes $<
+
+dist/routes:
+	mkdir -p dist/routes
+
+dist/fonts/%.ttf: $(FONTS_INPUT) dist/fonts
+	cp $< $@
+
+dist/images/%: $(IMAGES_INPUT) dist/images
+	cp $< $@
+
+dist/package.json: dist
+	cp package.json dist/package.json
+
+dist/fonts: dist
+	mkdir -p dist/fonts
+
+dist/images: dist
+	mkdir -p dist/images
+
+dist:
+	mkdir -p dist
 
 clean:
 	@rm -f *.pdf
