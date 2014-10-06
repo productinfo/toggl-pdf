@@ -22,8 +22,24 @@ class DetailedReport extends Report
   fileName: ->
     'detailed-report'
 
+  insertSpaces = (str) ->
+    if str.length <= 79
+      return str
+
+    result = []
+    for substr in str.split(' ')
+      if substr.indexOf(' ') > 78 || (substr.indexOf(' ') == -1 && substr.length > 78)
+        result.push insertSpaces([substr.slice(0, 78), ' ', substr.slice(78)].join(''))
+      else
+        result.push substr
+
+    result.join(' ')
+
   getDescription = (description) ->
-    description or '(no description)'
+    if description
+      insertSpaces description
+    else
+      '(no description)'
 
   calculateDuration: (duration) =>
     timeFormatMode = @data.params?.time_format_mode
