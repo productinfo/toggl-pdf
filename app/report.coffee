@@ -82,6 +82,8 @@ class Report
     }[paramName]
 
   reportHeader: (name) ->
+    if @data.env?.name?
+      name = @data.env.name
     @doc.fontSize(20).text name, 35, 1
     logo = @data.env?.logo or __dirname + '/images/toggl.png'
     try
