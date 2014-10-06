@@ -1,18 +1,12 @@
-FONTS_INPUT := $(wildcard app/fonts/*.ttf)
-FONTS_OUTPUT := $(patsubst app/%,dist/%, $(FONTS_INPUT))
-
-IMAGES_INPUT := $(wildcard app/images/*)
-IMAGES_OUTPUT := $(patsubst app/%,dist/%, $(IMAGES_INPUT))
-
-COFFEEFILES = $(shell find app/ -type f -name '*.coffee')
-OUTPUTJSFILES = $(patsubst app/%.coffee, dist/%.js, $(COFFEEFILES))
+COPIED_OUTPUT := $(patsubst app/%,dist/%, $(shell find app/images/ app/fonts -type f -name '*'))
+OUTPUTJSFILES = $(patsubst app/%.coffee, dist/%.js, $(shell find app/ -type f -name '*.coffee'))
 
 default: s
 
 run:
 	@coffee --nodejs --stack_size=4096 app/server.coffee
 
-release: $(IMAGES_OUTPUT) $(FONTS_OUTPUT) dist/package.json coffee node_modules
+release: $(COPIED_OUTPUT) dist/package.json coffee node_modules
 	@echo > /dev/null
 
 node_modules: dist
@@ -22,25 +16,21 @@ coffee: $(OUTPUTJSFILES)
 	@echo > /dev/null
 
 dist/%.js: app/%.coffee
-	coffee -co $(@D) $<
+	@coffee -co $(@D) $<
 
-dist/fonts/%.ttf: $(FONTS_INPUT) dist/fonts
-	cp $< $@
+dist/fonts/%: app/fonts/%
+	@mkdir -p $(@D)
+	@cp $< $@
 
-dist/images/%: $(IMAGES_INPUT) dist/images
-	cp $< $@
+dist/images/%: app/images/%
+	@mkdir -p $(@D)
+	@cp $< $@
 
 dist/package.json: dist
-	cp package.json dist/package.json
-
-dist/fonts: dist
-	mkdir -p dist/fonts
-
-dist/images: dist
-	mkdir -p dist/images
+	@cp package.json dist/package.json
 
 dist:
-	mkdir -p dist
+	@mkdir -p dist
 
 clean:
 	@rm -f *.pdf
@@ -73,3 +63,5 @@ fonts:
 	./merge.ff app/fonts/src/OpenSans-Bold.ttf app/fonts/src/OpenSansHebrew-Bold.ttf
 	@cp app/fonts/src/OpenSans-Bold-merged.ttf app/fonts/OpenSans-Bold.ttf
 	@rm app/fonts/src/OpenSans*-merged.ttf
+
+.PHONY: node_modules
