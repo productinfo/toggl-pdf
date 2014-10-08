@@ -29,7 +29,7 @@ class SummaryReport extends Report
     @createdWith()
 
   fileName: ->
-    'summary-report'
+    "Toggl #{@data.params?.grouping} #{@data.params?.since} to #{@data.params?.until}"
 
   sector: (cx, cy, r, startAngle, endAngle) ->
     sweepFlag = endAngle - startAngle > 180
