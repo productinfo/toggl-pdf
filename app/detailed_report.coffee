@@ -20,7 +20,7 @@ class DetailedReport extends Report
     @createdWith()
 
   fileName: ->
-    "Toggl #{@data.params?.grouping} #{@data.params?.since} to #{@data.params?.until}"
+    "Toggl time entries #{@data.params?.since} to #{@data.params?.until}"
 
   insertSpaces = (str) ->
     if str.length <= 79
