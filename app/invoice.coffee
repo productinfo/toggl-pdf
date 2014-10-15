@@ -60,13 +60,13 @@ class Invoice
     headerWidth = 200
     @doc.font('FontBold').fontSize 20
     @doc.text "Invoice #N#{@data.id}", 595/2 - headerWidth/2, 10, align: 'center', width: headerWidth
-  
+
   userDetails: ->
     createdAt = moment @data.created_at
     @doc.font('FontBold').fontSize 10
     @doc.text @data.company_name, @LEFT, 5
     @doc.font('FontRegular').fontSize 7
-    @doc.text @data.company_address, @LEFT, 18
+    @doc.text "#{@data.company_address} #{(if @data.country? then @data.country else '')}", @LEFT, 18
     @doc.text @data.contact_person, @LEFT, 28
     @doc.text @data.vat_number, @LEFT, 38
     @doc.font('FontRegular').fontSize 7

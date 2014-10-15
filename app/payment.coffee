@@ -65,7 +65,7 @@ class Payment
     @doc.font('FontBold').fontSize 10
     @doc.text @data.company_name, @LEFT, 5
     @doc.font('FontRegular').fontSize 7
-    @doc.text @data.company_address, @LEFT, 18
+    @doc.text "#{@data.company_address} #{(if @data.country? then @data.country else '')}", @LEFT, 18
     @doc.text @data.contact_person, @LEFT, 28
     @doc.text @data.vat_number, @LEFT, 38
 

@@ -12,9 +12,10 @@ payment = new Payment
   created_at: 'October 10, 2013'
   discount_percentage: 0
   vat_percentage: 20
-  company_name: 'Toggl OU'
+  company_name: 'Toggl OÜ'
   company_address: 'Rävala 8'
   contact_person: 'Toggl employee'
   vat_number: 'EE12345678'
+  country: 'Estonia'
 
 payment.write('payment.pdf')
