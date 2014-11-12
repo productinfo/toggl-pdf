@@ -55,10 +55,27 @@ class WeeklyReport extends Report
     else
       ""
 
+  showEarnings: ->
+    @data.params.calculate? && @data.params.calculate == 'earnings'
+
+
+  slotEarnings: (amount, currency) ->
+    if amount?
+      amount + ' ' + currency
+    else
+      ""
+
+  drawCells: (slot, idx) ->
+    if @showEarnings()
+      for amount, i in slot.amount
+        @doc.text @slotEarnings(amount, slot.currency), 250 + i * 40, 1, width: 0
+    else
+      @doc.text @slotDuration(slot), 250 + idx * 40, 1, width: 0
+
   drawRow: (row) ->
     @doc.text @rowTitle(row.title), @LEFT, 1
     for slot, i in row.totals
-      @doc.text @slotDuration(slot), 250 + i * 40, 1, width: 0
+       @drawCells(slot, i) 
     @translate 0, 15
     if @posY > Report.PAGE_HEIGHT - Report.MARGIN_BOTTOM
       @addPage()

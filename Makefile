@@ -50,12 +50,16 @@ d:
 w:
 	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && open weekly.pdf
 
+we:
+	@coffee --nodejs --stack_size=4096 testdata/test_weekly_earnings.coffee && open weekly_earnings.pdf
+
 test: clean
 	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && file invoice.pdf | grep PDF && true
 	@coffee --nodejs --stack_size=4096 testdata/test_payment.coffee && file payment.pdf | grep PDF && true
 	@coffee --nodejs --stack_size=4096 testdata/test_summary.coffee && file summary.pdf | grep PDF && true
 	@coffee --nodejs --stack_size=4096 testdata/test_detailed.coffee && file detailed.pdf | grep PDF && true
 	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && file weekly.pdf | grep PDF && true
+	@coffee --nodejs --stack_size=4096 testdata/test_weekly_earnings.coffee && file weekly_earnings.pdf | grep PDF && true
 
 fonts:
 	./merge.ff app/fonts/src/OpenSans-Regular.ttf app/fonts/src/OpenSansHebrew-Regular.ttf
