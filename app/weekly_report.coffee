@@ -20,7 +20,7 @@ class WeeklyReport extends Report
     @createdWith()
 
   fileName: ->
-    "Toggl #{@data.params?.grouping} #{@data.params?.since} to #{@data.params?.until}"
+    "Toggl_#{@data.params?.grouping}_#{@data.params?.since}_to_#{@data.params?.until}"
 
   reportTable: ->
     @doc.font('FontBold').fontSize(7).fill('#6f7071')
