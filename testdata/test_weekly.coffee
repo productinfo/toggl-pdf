@@ -7,6 +7,8 @@ data.params =
   grouping: 'projects'
   tag_names: 'Master, Productive, nobill'
   task_names: 'Top-secret, Trip to Tokio'
+data.env =
+  logo: './testdata/testlogo.png'
 
 report = new WeeklyReport data
 report.write 'weekly.pdf'
