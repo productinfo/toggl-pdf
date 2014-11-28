@@ -1,4 +1,5 @@
 PDFDocument = require 'pdfkit'
+fs = require('fs')
 
 class Report
   # 72 PPI A4 size in pixels
@@ -10,6 +11,7 @@ class Report
     @pageNum = 1
     @posX = @posY = 0
     @doc = new PDFDocument size: 'A4'
+
     @initFonts()
 
   initFonts: ->
@@ -18,8 +20,9 @@ class Report
     @doc.font('FontRegular').fontSize(7)
 
   write: (filename) ->
+    @doc.pipe fs.createWriteStream(filename)
     @finalize()
-    @doc.write filename
+    @doc.end()
 
   output: (cb) ->
     @finalize()

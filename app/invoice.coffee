@@ -1,6 +1,7 @@
 PDFDocument = require 'pdfkit'
 moment = require 'moment'
 util = require 'util'
+fs = require('fs')
 
 class Invoice
   @PAGE_WIDTH = 595
@@ -15,8 +16,9 @@ class Invoice
     @doc.font('FontRegular').fontSize(7)
 
   write: (filename) ->
+    @doc.pipe fs.createWriteStream(filename)
     @finalize()
-    @doc.write filename
+    @doc.end()
 
   output: (cb) ->
     @finalize()
