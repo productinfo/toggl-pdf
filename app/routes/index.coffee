@@ -112,9 +112,9 @@ generatePayment = (payment, dataPath, req, res) ->
         res.send 400, 'Bad request'
     else
       payment.data = results.data
-      payment.output (result) ->
-        res.writeHead 200, pdfHeaders(payment.fileName())
-        res.end result, 'binary'
+      
+      res.writeHead 200, pdfHeaders(payment.fileName())
+      payment.output(res)
 
 generateReport = (report, dataPath, req, res) ->
   parsedURL = url.parse req.url
@@ -141,10 +141,8 @@ generateReport = (report, dataPath, req, res) ->
       report.data.env = results.env
 
       console.time("  * PDF time")
-      report.output (result) ->
-        console.timeEnd("  * PDF time")
-        res.writeHead 200, pdfHeaders(report.fileName())
-        res.end result, 'binary'
+      res.writeHead 200, pdfHeaders(report.fileName())
+      report.output(res)
 
   apiRequests =
     env: (callback) ->

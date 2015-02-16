@@ -20,9 +20,10 @@ class Invoice
     @finalize()
     @doc.end()
 
-  output: (cb) ->
+  output: (stream) ->
+    @doc.pipe stream
     @finalize()
-    @doc.output (result) => cb result
+    @doc.end()
 
   fileName: ->
     'toggl-invoice'
