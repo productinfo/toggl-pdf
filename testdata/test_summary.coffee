@@ -1,5 +1,6 @@
 SummaryReport  = require '../app/summary_report'
 data = require './data/summary.json'
+fs = require 'fs'
 
 data.params =
   since: '2013-04-29'
@@ -11,4 +12,4 @@ data.params =
   task_names: 'Top-secret, Trip to Tokio'
 
 report = new SummaryReport(data)
-report.write('summary.pdf')
+report.output(fs.createWriteStream('summary.pdf'))

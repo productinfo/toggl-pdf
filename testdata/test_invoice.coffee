@@ -1,4 +1,6 @@
 Invoice = require '../app/invoice'
+fs = require 'fs'
+
 invoice = new Invoice
   id: 142250
   description: 'Description'
@@ -17,4 +19,4 @@ invoice = new Invoice
   contact_person: 'Toggl employee'
   vat_number: 'EE12345678'
 
-invoice.write('invoice.pdf')
+invoice.output(fs.createWriteStream('invoice.pdf'))

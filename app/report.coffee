@@ -1,5 +1,4 @@
 PDFDocument = require 'pdfkit'
-fs = require('fs')
 
 class Report
   # 72 PPI A4 size in pixels
@@ -18,11 +17,6 @@ class Report
     @doc.registerFont('FontRegular', __dirname + '/fonts/NotoSans-Regular.ttf', 'Noto Sans')
     @doc.registerFont('FontBold', __dirname + '/fonts/NotoSans-Bold.ttf', 'Noto Sans Bold')
     @doc.font('FontRegular').fontSize(7)
-
-  write: (filename) ->
-    @doc.pipe fs.createWriteStream(filename)
-    @finalize()
-    @doc.end()
 
   output: (stream) ->
     @doc.pipe stream

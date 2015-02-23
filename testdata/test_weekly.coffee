@@ -1,5 +1,6 @@
 WeeklyReport  = require '../app/weekly_report'
 data = require './data/weekly.json'
+fs = require 'fs'
 
 data.params =
   since: '2013-12-09'
@@ -11,4 +12,4 @@ data.env =
   logo: './testdata/testlogo.png'
 
 report = new WeeklyReport data
-report.write 'weekly.pdf'
+report.output(fs.createWriteStream('weekly.pdf'))

@@ -1,5 +1,6 @@
 DetailedReport  = require '../app/detailed_report'
 data = require './data/detailed.json'
+fs = require 'fs'
 
 data.params =
   user_count: 4
@@ -13,4 +14,4 @@ data.params =
   client_names: 'Toggl, Teamweek'
 
 report = new DetailedReport(data)
-report.write('detailed.pdf')
+report.output(fs.createWriteStream('detailed.pdf'))

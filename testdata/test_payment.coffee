@@ -1,4 +1,6 @@
 Payment = require '../app/payment'
+fs = require 'fs'
+
 payment = new Payment
   id: 4813834924847959
   description: 'Description'
@@ -18,4 +20,4 @@ payment = new Payment
   vat_number: 'EE12345678'
   country: 'Estonia'
 
-payment.write('payment.pdf')
+payment.output(fs.createWriteStream('payment.pdf'))

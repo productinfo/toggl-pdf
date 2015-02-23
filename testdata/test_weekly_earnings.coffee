@@ -1,5 +1,6 @@
 WeeklyReport  = require '../app/weekly_report'
 data = require './data/weekly_earnings.json'
+fs = require 'fs'
 
 data.params =
   since: '2013-12-09'
@@ -10,4 +11,4 @@ data.params =
   calculate: 'earnings'
 
 report = new WeeklyReport data
-report.write 'weekly_earnings.pdf'
+report.output(fs.createWriteStream('weekly_earnings.pdf'))
