@@ -75,9 +75,6 @@ class SummaryReport extends Report
       @doc.text yAxisText(maxValue * 0.75), 550, 30, width: 0
       @doc.text yAxisText(maxValue * 0.5), 550, 60, width: 0
       @doc.text yAxisText(maxValue * 0.25), 550, 90, width: 0
-    else
-      @doc.text '1 h', 550, 0.1
-      @doc.text '0 h', 550, 90
 
     MAX_DAYS = 31
     BAR_PADDING = 4
