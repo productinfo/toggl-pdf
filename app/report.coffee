@@ -1,4 +1,5 @@
 PDFDocument = require 'pdfkit'
+bugsnag     = require 'bugsnag'
 
 class Report
   # 72 PPI A4 size in pixels
@@ -111,7 +112,9 @@ class Report
         group_size = @int @data.params["#{group}_count"]
         @doc.text group_filter, 35, yPos
         textWidth = @doc.widthOfString group_filter
-        prefix = if group_size > 3 then " and #{group_size - 3} more" else ''
+        prefix = if group_size > 3 then " and #{group_size - 3} more" else ""
+        if textWidth > 170
+          textWidth = 40
         @doc.fillColor('#929292').text "#{prefix} selected as #{group}s", 38 + textWidth, yPos
         yPos += 15
     @translate 0, yPos - 15

@@ -36,16 +36,19 @@ exports.getPayment = (req, res) ->
   generatePayment payment, dataPath, req, res
 
 exports.getStatus = (req, res) ->
-  res.send 200, 'OK'
+  res.writeHead 200, 'Content-Type': 'application/json'
+  res.end 'OK'
 
 exports.notFound = (req, res, next) ->
-  res.send 404, 'This is not the page you are looking for!'
+  res.writeHead 400, 'Content-Type': 'text/plain'
+  res.end 'This is not the page you are looking for!'
 
 exports.internalError = (err, req, res, next) ->
   bugsnag.notify err,
     headers: req['headers'],
     parsedUrl: req['_parsedUrl']
-  res.send 500, 'Looks like something went wrong!'
+  res.writeHead 500, 'Content-Type': 'text/plain'
+  res.end 'Looks like something went wrong!'
 
 ###### Helpers ######
 
@@ -69,13 +72,13 @@ makeRequest = (queryPath, headers, cb) ->
     hostname: apiHost
     headers: headers
 
-  request =  https.get options
+  request = https.get options
+  request.on 'error', -> cb("API responsed with error", null)
   request.on 'response', (res) ->
     chunks = []
     res.on 'data', (chunk) -> chunks.push(chunk)
 
     res.on 'error', (err) ->
-      console.log 'error'
       cb err, null
 
     res.on 'end', ->
@@ -101,8 +104,12 @@ fetchImage = (data, cb) ->
       data.logo = new Buffer chunks.join(''), 'binary' if res.statusCode is 200
       cb null, data
 
+
 generatePayment = (payment, dataPath, req, res) ->
-  headers = cookie: req.headers.cookie, authorization: req.headers.authorization
+  if req.headers.cookie?
+    headers.cookie = req.headers.cookie
+  if req.headers.authorization?
+    headers.authorization = req.headers.authorization
   makeRequest dataPath, headers, (err, results) ->
     if err?
       console.log "generatePayment FAILED", dataPath, err
@@ -119,7 +126,11 @@ generatePayment = (payment, dataPath, req, res) ->
 generateReport = (report, dataPath, req, res) ->
   parsedURL = url.parse req.url
   envPath   = getReportUrl "env.json?#{parsedURL.query}"
-  headers   = cookie: req.headers.cookie, authorization: req.headers.authorization
+  headers   = {}
+  if req.headers.cookie?
+    headers.cookie = req.headers.cookie
+  if req.headers.authorization?
+    headers.authorization = req.headers.authorization
   params    = querystring.parse parsedURL.query
   dataPath  = dataPath + "?view=print&string_title=true&bars_count=31&#{parsedURL.query}"
 
@@ -143,7 +154,7 @@ generateReport = (report, dataPath, req, res) ->
       console.time("  * PDF time")
       res.writeHead 200, pdfHeaders(report.fileName())
       report.output(res)
-
+      
   apiRequests =
     env: (callback) ->
       makeRequest envPath, headers, (err, data) ->

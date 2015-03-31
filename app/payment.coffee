@@ -1,5 +1,5 @@
 PDFDocument = require 'pdfkit'
-moment = require 'moment'
+moment      = require 'moment'
 
 class Payment
   @PAGE_WIDTH = 595

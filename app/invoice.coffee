@@ -1,7 +1,6 @@
 PDFDocument = require 'pdfkit'
-moment = require 'moment'
-util = require 'util'
-fs = require('fs')
+moment      = require 'moment'
+util        = require 'util'
 
 class Invoice
   @PAGE_WIDTH = 595
@@ -14,11 +13,6 @@ class Invoice
     @doc.registerFont('FontRegular', __dirname + '/fonts/NotoSans-Regular.ttf', 'Noto Sans')
     @doc.registerFont('FontBold', __dirname + '/fonts/NotoSans-Bold.ttf', 'Noto Sans Bold')
     @doc.font('FontRegular').fontSize(7)
-
-  write: (filename) ->
-    @doc.pipe fs.createWriteStream(filename)
-    @finalize()
-    @doc.end()
 
   output: (stream) ->
     @doc.pipe stream
