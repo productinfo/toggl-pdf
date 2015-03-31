@@ -7,7 +7,6 @@
     "async": "*",
     "moment": "~2.1.0",
     "express": "~3.20.2",
-    "bugsnag": "~1.1.5",
-    "node-inspector": "*"
+    "bugsnag": "~1.1.5"
   }
 }
