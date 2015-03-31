@@ -106,6 +106,7 @@ fetchImage = (data, cb) ->
 
 
 generatePayment = (payment, dataPath, req, res) ->
+  headers = {}
   if req.headers.cookie?
     headers.cookie = req.headers.cookie
   if req.headers.authorization?
