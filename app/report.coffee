@@ -47,6 +47,9 @@ class Report
   int: (str) ->
     parseInt str, 10
 
+  isFree: ->
+    return not @data.env?.workspace?.pro
+
   createdWith: ->
     @doc.text 'Created with toggl.com', 473, 1, width: 0
 
@@ -99,12 +102,14 @@ class Report
       "#{cur.amount.toFixed(2)} #{cur.currency}"
 
     @doc.fontSize(10).text @shortDuration(@data.total_grand), 65, 50
-    @doc.fontSize(10).text @shortDuration(@data.total_billable), 205, 50
-    @doc.fontSize(10).text amounts.join(', '), 285, 50
+    unless @isFree()
+      @doc.fontSize(10).text @shortDuration(@data.total_billable), 205, 50
+      @doc.fontSize(10).text amounts.join(', '), 285, 50
 
     @doc.fillColor '#929292'
     @doc.fontSize(10).text 'Total', 35, 50
-    @doc.fontSize(10).text 'Billable', 165, 50
+    unless @isFree()
+      @doc.fontSize(10).text 'Billable', 165, 50
 
   selectedFilters: ->
     yPos = 1

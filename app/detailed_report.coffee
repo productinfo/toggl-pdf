@@ -83,7 +83,7 @@ class DetailedReport extends Report
         stop = if row.end? then moment(row.end[...TSIZE]) else moment()
         @doc.text start.format('HH:mm') + '-' + stop.format('HH:mm'), 405, 20
       @doc.fillColor('black')
-      if row.is_billable
+      if row.is_billable && !@isFree()
         @doc.text row.billable + ' ' + row.cur, 465, 20
 
       @doc.lineWidth(0.5).moveTo(@LEFT, 35).lineTo(550, 35).stroke(1)

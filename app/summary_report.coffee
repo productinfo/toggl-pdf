@@ -187,18 +187,24 @@ class SummaryReport extends Report
     @doc.fontSize(7)
     @doc.font('FontBold').fill '#6f7071'
     @doc.text "#{@capitalize(@grouping 'grouping')} / #{@capitalize(@grouping 'subgrouping')}", 55, 10
-    @doc.text 'Duration', 390, 10
-    @doc.text 'Amount', 450, 10
+    if @isFree()
+      @doc.text 'Duration', 450, 10
+    else
+      @doc.text 'Duration', 390, 10
+      @doc.text 'Amount', 450, 10
 
     @translate 0, 20
     @doc.fill('#000000')
     for group in @data.data
       @doc.font 'FontBold'
       @doc.text group.title, 55, 10
-      @doc.text @displayDuration(group.time), 390, 10
-      amounts = for cur in group.total_currencies when cur.amount?
-        cur.amount.toFixed(2) + " " + cur.currency
-      @doc.text amounts.join(', '), 450, 10
+      if @isFree()
+        @doc.text @displayDuration(group.time), 450, 10
+      else
+        @doc.text @displayDuration(group.time), 390, 10
+        amounts = for cur in group.total_currencies when cur.amount?
+          cur.amount.toFixed(2) + " " + cur.currency
+        @doc.text amounts.join(', '), 450, 10
       @translate 0, 20
 
       @doc.font 'FontRegular'
@@ -207,8 +213,11 @@ class SummaryReport extends Report
         title      = getTitle item.title
         lineCount  = title.length / lineHeight
         @doc.text title, 60, 10, width: 330, lineCap: lineCount
-        @doc.text @displayDuration(item.time), 390, 10
-        @doc.text item.sum.toFixed(2) + " " + item.cur, 450, 10 if item.sum? and item.sum > 0
+        if @isFree()
+          @doc.text @displayDuration(item.time), 450, 10
+        else
+          @doc.text @displayDuration(item.time), 390, 10
+          @doc.text item.sum.toFixed(2) + " " + item.cur, 450, 10 if item.sum? and item.sum > 0
         @translate 0, 20
 
         # If the we have multiline description then lets move the lines down
