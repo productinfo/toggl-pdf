@@ -104,7 +104,7 @@ class SummaryReport extends Report
     zoom = @data.activity.zoom_level
     dateFormat = switch zoom
       when 'day' then 'Do MMM'
-      when 'week' then 'DD.MM - DD.MM'
+      when 'week' then 'DD.MM'
       when 'month' then 'MMM'
 
     @doc.font('FontRegular').fontSize 7
