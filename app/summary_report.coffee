@@ -131,9 +131,6 @@ class SummaryReport extends Report
 
   pieChart: (part = 'grouping') ->
     title = @capitalize @grouping(part)
-    durationFunc = @shortDuration
-    if @data.params?['time_format_mode'] == 'decimal'
-      durationFunc = @decimalDuration
 
     @doc.fontSize(14).fill('#000').text title, 50, 1
 
@@ -179,7 +176,7 @@ class SummaryReport extends Report
         group.name
       @doc.fillColor('#000000').text groupName, 83, cy - 6, width: 200
       labelWidth = @doc.widthOfString groupName
-      @doc.fillColor('#6d6d6d').text durationFunc(group.time), 93 + labelWidth, cy - 6
+      @doc.fillColor('#6d6d6d').text @displayDuration(group.time), 93 + labelWidth, cy - 6
       cy = cy + 20
 
   getTitle = (title) ->
@@ -193,16 +190,12 @@ class SummaryReport extends Report
     @doc.text 'Duration', 390, 10
     @doc.text 'Amount', 450, 10
 
-    durationFunc = @classicDuration
-    if @data.params?['time_format_mode'] == 'decimal'
-      durationFunc = @decimalDuration
-
     @translate 0, 20
     @doc.fill('#000000')
     for group in @data.data
       @doc.font 'FontBold'
       @doc.text group.title, 55, 10
-      @doc.text durationFunc(group.time), 390, 10
+      @doc.text @displayDuration(group.time), 390, 10
       amounts = for cur in group.total_currencies when cur.amount?
         cur.amount.toFixed(2) + " " + cur.currency
       @doc.text amounts.join(', '), 450, 10
@@ -214,7 +207,7 @@ class SummaryReport extends Report
         title      = getTitle item.title
         lineCount  = title.length / lineHeight
         @doc.text title, 60, 10, width: 330, lineCap: lineCount
-        @doc.text durationFunc(item.time), 390, 10
+        @doc.text @displayDuration(item.time), 390, 10
         @doc.text item.sum.toFixed(2) + " " + item.cur, 450, 10 if item.sum? and item.sum > 0
         @translate 0, 20
 

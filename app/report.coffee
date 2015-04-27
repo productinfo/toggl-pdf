@@ -1,5 +1,6 @@
 PDFDocument = require 'pdfkit'
 bugsnag     = require 'bugsnag'
+timeFormat  = require 'time-format-utils'
 
 class Report
   # 72 PPI A4 size in pixels
@@ -58,11 +59,13 @@ class Report
     func()
     console.timeEnd name
 
-  decimalDuration: (milliseconds) ->
-    (milliseconds / 1000 / 60 / 60).toFixed(2) + " h"
-
-  classicDuration: (milliseconds) =>
-    @splitDuration(milliseconds).join(':')
+  displayDuration: (milliseconds) ->
+    displayType = @data.params?.time_format_mode
+    displayType ||= 'classic'
+    result = timeFormat.secondsToExtHhmmss((milliseconds / 1000), displayType)
+    if displayType is 'improved'
+      return result.replace(/<[^>]*>/g, '') # time-format-utils returns some html with the improved type...
+    return result
 
   splitDuration: (milliseconds) ->
     [

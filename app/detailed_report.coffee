@@ -61,7 +61,7 @@ class DetailedReport extends Report
       start       = moment(row.start[...TSIZE])
       description = getDescription row.description
       lineCount   = description.length / 90
-      duration    = @calculateDuration row.dur
+      duration    = @displayDuration(row.dur)
       @doc.font 'FontBold'
       @doc.text "#{start.format('MM-DD')}", @LEFT, 7
       @doc.text description, 65, 9, { width: 330, lineCap: lineCount }

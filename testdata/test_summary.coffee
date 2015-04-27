@@ -7,7 +7,7 @@ data.params =
   until: '2013-05-05'
   subgrouping: 'tasks'
   grouping: 'projects'
-  time_format_mode: 'decimal'
+  time_format_mode: 'improved'
   tag_names: 'Master, Productive, nobill'
   task_names: 'Top-secret, Trip to Tokio'
 
