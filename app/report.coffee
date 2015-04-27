@@ -47,6 +47,12 @@ class Report
   int: (str) ->
     parseInt str, 10
 
+  groupSize: (group) ->
+    group.split(',').length
+
+  groupToLenght: (group, length) ->
+    group.split(',').slice(0, length).join(', ')
+
   isFree: ->
     return not @data.env?.workspace?.pro
 
@@ -116,13 +122,20 @@ class Report
     for group in ['user', 'project', 'client', 'task', 'tag']
       @doc.fontSize(10).fillColor('#000')
       if @data.params["#{group}_names"]?.length > 0
-        group_filter = "#{@data.params["#{group}_names"]}"
+        group_filter = @groupToLenght("#{@data.params["#{group}_names"]}", 3)
         group_size = @int @data.params["#{group}_count"]
+        
+        # if the _count parameter is missing, try to guess the value
+        if isNaN(group_size)
+          group_size = @groupSize(@data.params["#{group}_names"])
+        if group_filter.length > 60
+          group_filter = group_filter.substring(0, 59) + '...'
         @doc.text group_filter, 35, yPos
+
         textWidth = @doc.widthOfString group_filter
         prefix = if group_size > 3 then " and #{group_size - 3} more" else ""
-        if textWidth > 170
-          textWidth = 40
+        if textWidth > 420
+          textWidth = 420
         @doc.fillColor('#929292').text "#{prefix} selected as #{group}s", 38 + textWidth, yPos
         yPos += 15
     @translate 0, yPos - 15
