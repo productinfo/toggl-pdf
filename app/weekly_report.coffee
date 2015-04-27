@@ -51,7 +51,7 @@ class WeeklyReport extends Report
 
   slotDuration: (seconds) ->
     if seconds > 0
-      @splitDuration(seconds).slice(0, 2).join(':')
+      @displayDuration(seconds)
     else
       ""
 
