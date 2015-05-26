@@ -10,7 +10,7 @@
   "data":[  
     {  
       "title":{  
-        "client":"Big Client",
+        "client":"Big Client, あいうえお",
         "project":"Architectural work"
       },
       "pid":4743261,
@@ -45,7 +45,7 @@
     },
     {  
       "title":{  
-        "client":"Big Client",
+        "client":"Big Client, 中国文字之美",
         "project":"Surfrider event planning"
       },
       "pid":4880896,
