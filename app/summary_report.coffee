@@ -182,13 +182,22 @@ class SummaryReport extends Report
       cy = cy + 20
 
   getTitle = (title) ->
-    return if typeof title is 'object'
+    if typeof title is 'object'
+      if title.time_entry
+        return title.time_entry
+      if title.user
+        return title.user
+      if title.project
+        if title.client
+          return title.project + ' - ' +title.client
+        else
+          return title.project
       if title.client
-        title.project + ' - ' +title.client
+        return title.client
       else
-        title.project
+        return '-'
     else
-      title or '(no title)'
+      return title or '(no title)'
 
   reportTable: ->
     @translate 0, 20

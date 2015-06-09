@@ -5,7 +5,7 @@ fs = require 'fs'
 data.params =
   since: '2013-04-29'
   until: '2013-05-05'
-  subgrouping: 'tasks'
+  subgrouping: 'time_entries'
   grouping: 'projects'
   time_format_mode: 'improved'
   tag_names: 'Master, Productive, nobill'
