@@ -146,8 +146,9 @@ class SummaryReport extends Report
       subgroups = {}
       for group, i in @data.data
         for item, i in group.items
-          subgroups[item.title] = 0 unless subgroups[item.title]?
-          subgroups[item.title] += item.time
+          title = (getTitle item.title)
+          subgroups[title] = 0 unless subgroups[title]?
+          subgroups[title] += item.time
 
       filterOthers(time, name, 0.05) for name, time of subgroups
     else
@@ -170,10 +171,11 @@ class SummaryReport extends Report
     cy = 255
     for group, i in groups
       @doc.circle(63, cy, 8).fill COLORS[i]
-      groupName = if group.name.length > 30
-        group.name.substr(0, 25) + '...'
+      title = getTitle group.name
+      groupName = if title.length > 30
+        title.substr(0, 25) + '...'
       else
-        group.name
+        title
       @doc.fillColor('#000000').text groupName, 83, cy - 6, width: 200
       labelWidth = @doc.widthOfString groupName
       @doc.fillColor('#6d6d6d').text @displayDuration(group.time), 93 + labelWidth, cy - 6
