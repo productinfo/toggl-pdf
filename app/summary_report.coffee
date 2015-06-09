@@ -180,7 +180,13 @@ class SummaryReport extends Report
       cy = cy + 20
 
   getTitle = (title) ->
-    title or '(no title)'
+    return if typeof title is 'object'
+      if title.client
+        title.project + ' - ' +title.client
+      else
+        title.project
+    else
+      title or '(no title)'
 
   reportTable: ->
     @translate 0, 20
@@ -197,7 +203,7 @@ class SummaryReport extends Report
     @doc.fill('#000000')
     for group in @data.data
       @doc.font 'FontBold'
-      @doc.text group.title, 55, 10
+      @doc.text (getTitle group.title), 55, 10
       if @isFree()
         @doc.text @displayDuration(group.time), 450, 10
       else
