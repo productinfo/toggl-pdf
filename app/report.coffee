@@ -54,6 +54,11 @@ class Report
     group.split(',').slice(0, length).join(', ')
 
   isFree: ->
+    # @data.logo? is alternative check for pro workspace as some of the
+    # reports don't supply necessary data. Paid workspace have logo 
+    # available (default if it wasn't uploaded). Free ones don't have one.
+    # 
+    # should be refactored together with decomissioning of env endpoint
     if @data.env?.workspace?.pro || @data.logo?
       return false
 
