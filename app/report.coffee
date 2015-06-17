@@ -54,7 +54,15 @@ class Report
     group.split(',').slice(0, length).join(', ')
 
   isFree: ->
-    return not @data.env?.workspace?.pro
+    # @data.logo? is alternative check for pro workspace as some of the
+    # reports don't supply necessary data. Paid workspace have logo 
+    # available (default if it wasn't uploaded). Free ones don't have one.
+    # 
+    # should be refactored together with decomissioning of env endpoint
+    if @data.env?.workspace?.pro || @data.logo?
+      return false
+
+    return true
 
   createdWith: ->
     @doc.text 'Created with toggl.com', 473, 1, width: 0
@@ -96,7 +104,7 @@ class Report
     if @data.env?.name?
       name = @data.env.name
     @doc.fontSize(20).text name, 35, 1
-    logo = @data.env?.logo or __dirname + '/images/toggl.png'
+    logo = @data.logo or __dirname + '/images/toggl.png'
     try
       @doc.image logo, 480, -2, width: 80
     catch error

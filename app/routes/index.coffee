@@ -55,6 +55,9 @@ exports.internalError = (err, req, res, next) ->
 getReportUrl = (path) ->
   "/reports/api/v2/#{path}"
 
+getApiV9Url = (path) ->
+  "/api/v9/workspaces/#{path}"
+
 getInvoiceUrl = (params) ->
   "/api/v8/workspaces/#{params['workspace_id']}/invoices/#{params['id']}"
 
@@ -101,7 +104,7 @@ fetchImage = (data, cb) ->
     res.setEncoding('binary')
     res.on 'data', (chunk) -> chunks.push(chunk)
     res.on 'end', ->
-      data.logo = new Buffer chunks.join(''), 'binary' if res.statusCode is 200
+      data = new Buffer chunks.join(''), 'binary' if res.statusCode is 200
       cb null, data
 
 
@@ -134,6 +137,7 @@ generateReport = (report, dataPath, req, res) ->
     headers.authorization = req.headers.authorization
   params    = querystring.parse parsedURL.query
   dataPath  = dataPath + "?view=print&string_title=true&bars_count=31&#{parsedURL.query}"
+  logoPath  = getApiV9Url "#{params['workspace_id']}/logo"
 
   if params.bookmark_token
     envPath = getReportUrl "bookmark/#{params.bookmark_token}"
@@ -151,6 +155,7 @@ generateReport = (report, dataPath, req, res) ->
       report.data = results.data
       report.data.params = params
       report.data.env = results.env
+      report.data.logo = results.logo
 
       console.time("  * PDF time")
       res.writeHead 200, pdfHeaders(report.fileName())
@@ -158,9 +163,11 @@ generateReport = (report, dataPath, req, res) ->
       
   apiRequests =
     env: (callback) ->
-      makeRequest envPath, headers, (err, data) ->
-        if err? then callback(err, data) else fetchImage(data, callback)
+      makeRequest envPath, headers, (err, data) -> callback(err, data)
     data: (callback) ->
       makeRequest dataPath, headers, (err, data) -> callback(err, data)
+    logo: (callback) ->
+      makeRequest logoPath, headers, (err, data) -> 
+        if err? then callback(err, data) else fetchImage(data, callback)
 
   async.parallel apiRequests, makePdf
