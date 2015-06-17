@@ -86,7 +86,11 @@ makeRequest = (queryPath, headers, cb) ->
 
     res.on 'end', ->
       if res.statusCode is 200
-        cb null, JSON.parse chunks.join('')
+        str = chunks.join('')
+        if str.length == 0
+          cb null, {}
+        else
+          cb null, JSON.parse str
       else
         cb "API responded with #{res.statusCode} - #{chunks.join('')}", null
 
