@@ -87,10 +87,13 @@ makeRequest = (queryPath, headers, cb) ->
     res.on 'end', ->
       if res.statusCode is 200
         str = chunks.join('')
-        if str.length == 0
-          cb null, {}
+        if res.headers['content-type'] == 'application/json'
+          if str.length == 0
+            cb null, {}
+          else
+            cb null, JSON.parse str
         else
-          cb null, JSON.parse str
+          cb null, str
       else
         cb "API responded with #{res.statusCode} - #{chunks.join('')}", null
 
