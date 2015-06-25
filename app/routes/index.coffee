@@ -87,7 +87,7 @@ makeRequest = (queryPath, headers, cb) ->
     res.on 'end', ->
       if res.statusCode is 200
         str = chunks.join('')
-        if res.headers['content-type'] == 'application/json'
+        if res.headers['content-type'].indexOf('application/json') > -1
           if str.length == 0
             cb null, {}
           else
