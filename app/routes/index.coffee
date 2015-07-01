@@ -97,6 +97,7 @@ makeRequest = (queryPath, headers, cb) ->
       else
         cb "API responded with #{res.statusCode} - #{chunks.join('')}", null
 
+
 fetchImage = (data, cb) ->
   logo = data.logo or data.workspace?.logo
   return cb(null, data) unless logo?
@@ -145,6 +146,7 @@ generateReport = (report, dataPath, req, res) ->
   params    = querystring.parse parsedURL.query
   dataPath  = dataPath + "?view=print&string_title=true&bars_count=31&#{parsedURL.query}"
   logoPath  = getApiV9Url "#{params['workspace_id']}/logo"
+  durationFmtPath = '/api/v9/me/duration_format'
 
   if params.bookmark_token
     envPath = getReportUrl "bookmark/#{params.bookmark_token}"
@@ -163,6 +165,7 @@ generateReport = (report, dataPath, req, res) ->
       report.data.params = params
       report.data.env = results.env
       report.data.logo = results.logo
+      report.data.duration_format = results.duration_fmt
 
       console.time("  * PDF time")
       res.writeHead 200, pdfHeaders(report.fileName())
@@ -173,6 +176,8 @@ generateReport = (report, dataPath, req, res) ->
       makeRequest envPath, headers, (err, data) -> callback(err, data)
     data: (callback) ->
       makeRequest dataPath, headers, (err, data) -> callback(err, data)
+    duration_fmt: (callback) ->
+      makeRequest durationFmtPath, headers, (err, data) -> callback(err, data)
     logo: (callback) ->
       makeRequest logoPath, headers, (err, data) -> 
         if err? then callback(err, data) else fetchImage(data, callback)

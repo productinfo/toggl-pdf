@@ -96,7 +96,12 @@ class SummaryReport extends Report
         @doc.rect(cx, MAX_BAR_HEIGHT, barWidth, -heights[i]).fill '#2cc1e6'
       # Draw labels above bars
       if barCount <= 16
-        @doc.text values[i].toFixed(2), cx, MAX_BAR_HEIGHT - heights[i] - 15, width: barWidth, align: 'center'
+        time = "#{height.toFixed(2)}"
+        if @data.duration_format != 'decimal'
+          hours = Math.floor(height)
+          minutes = Math.floor((height-hours)*60)
+          time = "#{hours}:#{if minutes < 10 then ('0' + minutes) else minutes}"
+        @doc.text time, cx, MAX_BAR_HEIGHT - heights[i] - 15, width: barWidth, align: 'center'
       cx += barWidthPad
 
     # Draw barchart horizontal date labels
