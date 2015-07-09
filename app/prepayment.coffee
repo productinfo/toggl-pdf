@@ -82,14 +82,14 @@ class Prepayment
     @doc.text 'Toggl subscription', 40, 1
     @doc.font('FontRegular').fontSize 8
     @doc.text @data.users_in_workspace, 300, 1
-    @doc.text " #{@data.amount_in_usd} USD", 503, 1, width: 0
+    @doc.text " #{@data.amount_in_usd / 100} USD", 503, 1, width: 0
 
   tableFooter: ->
     alignOpts = align: 'right', width: 60
     @doc.text 'Amount', 440, 1
     @doc.text "#{@price().toFixed(2)} USD", 490, 1, alignOpts
 
-    @doc.text "VAT #{@data.vat_percentage}%", 440, 15
+    @doc.text "VAT #{@vatPercentage()}%", 440, 15
     @doc.text "#{@vatAmount().toFixed(2)} USD", 490, 15, alignOpts
 
     @doc.font('FontBold').text "Total", 440, 30
@@ -118,18 +118,27 @@ class Prepayment
       "Not paid"
 
   price: ->
-    amount = @data.amount_in_usd
+    amount = @data.amount_in_usd / 100.0
     if @data.discount_percentage > 0
       amount - (amount * @data.discount_percentage / 100.0)
     else
-      @data.amount_in_usd
+      amount
+
+  vatPercentage: ->
+    if @data.vat_valid && @data.country_id != 69 # 60 == Estonia, special case
+      0
+    else
+      @data.vat_percentage
 
   vatAmount: ->
-    @price() * @data.vat_percentage / 100.0
+    if @vatPercentage() > 0
+      @price() * @vatPercentage() / 100.0
+    else
+      0
 
   totalPrice: ->
-    if @data.vat_percentage > 0
-      @price() + @price() * @data.vat_percentage / 100.0
+    if @vatPercentage() > 0
+      @price() + @price() * @vatPercentage() / 100.0
     else
       @price()
 

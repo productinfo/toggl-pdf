@@ -5,11 +5,12 @@ prepayment = new Prepayment
   id: 142250
   workspace_id: 1
   users_in_workspace: 5
-  amount_in_usd: 50
+  amount_in_usd: 5000
   contact_person: 'Jaan Jalgratas'
   company_name: 'Toggl OU'
   company_address: 'Rävala 8'
-  country_id :61
+  country_id: 69
+  country_name: 'Estonia'
   vat_number: 'EE12345678'
   vat_percentage: 20
   vat_valid: true
