@@ -53,6 +53,9 @@ w:
 we:
 	@coffee --nodejs --stack_size=4096 testdata/test_weekly_earnings.coffee && open weekly_earnings.pdf
 
+pre:
+	@coffee --nodejs --stack_size=4096 testdata/test_prepayment.coffee && open prepayment.pdf
+
 test: clean
 	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && file invoice.pdf | grep PDF && true
 	@coffee --nodejs --stack_size=4096 testdata/test_payment.coffee && file payment.pdf | grep PDF && true
