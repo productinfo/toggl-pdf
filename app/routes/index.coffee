@@ -6,6 +6,7 @@ querystring = require 'querystring'
 
 Invoice        = require '../invoice'
 Payment        = require '../payment'
+Prepayment     = require '../prepayment'
 WeeklyReport   = require '../weekly_report'
 SummaryReport  = require '../summary_report'
 DetailedReport = require '../detailed_report'
@@ -35,6 +36,11 @@ exports.getPayment = (req, res) ->
   dataPath = getPaymentUrl req.params
   generatePayment payment, dataPath, req, res
 
+exports.getPrepayment = (req, res) ->
+  prepayment = new Prepayment
+  dataPath = getPrepaymentUrl req.params
+  generatePayment prepayment, dataPath, req, res
+
 exports.getStatus = (req, res) ->
   res.writeHead 200, 'Content-Type': 'application/json'
   res.end 'OK'
@@ -60,6 +66,9 @@ getApiV9Url = (path) ->
 
 getInvoiceUrl = (params) ->
   "/api/v8/workspaces/#{params['workspace_id']}/invoices/#{params['id']}"
+
+getPrepaymentUrl = (params) ->
+  "/api/v9/workspaces/#{params['workspace_id']}/subscription/prepayments/#{params['id']}"
 
 getPaymentUrl = (params) ->
   "/api/v8/workspaces/#{params['workspace_id']}/payments/#{params['id']}"
