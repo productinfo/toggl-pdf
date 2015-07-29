@@ -21,6 +21,7 @@ app.get "/reports/api/v2/details.pdf", routes.getDetails
 app.get "/reports/api/v2/weekly.pdf",  routes.getWeekly
 app.get "/workspaces/:workspace_id/invoices/:id.pdf", routes.getInvoice
 app.get "/workspaces/:workspace_id/payments/:id.pdf", routes.getPayment
+app.get "/workspaces/:workspace_id/prepayments/:id.pdf", routes.getPrepayment
 
 server = http.createServer(app).listen app.get('port'), ->
   console.log('Server at http://127.0.0.1:' + app.get 'port')

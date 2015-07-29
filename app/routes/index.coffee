@@ -39,7 +39,7 @@ exports.getPayment = (req, res) ->
 exports.getPrepayment = (req, res) ->
   prepayment = new Prepayment
   dataPath = getPrepaymentUrl req.params
-  generatePayment prepayment, dataPath, req, res
+  generatePayment prepayment, dataPath, req, res, true
 
 exports.getStatus = (req, res) ->
   res.writeHead 200, 'Content-Type': 'application/json'
@@ -53,6 +53,7 @@ exports.internalError = (err, req, res, next) ->
   bugsnag.notify err,
     headers: req['headers'],
     parsedUrl: req['_parsedUrl']
+  console.log err
   res.writeHead 500, 'Content-Type': 'text/plain'
   res.end 'Looks like something went wrong!'
 
@@ -125,7 +126,7 @@ fetchImage = (data, cb) ->
       cb null, data
 
 
-generatePayment = (payment, dataPath, req, res) ->
+generatePayment = (payment, dataPath, req, res, is_prepayment = false) ->
   headers = {}
   if req.headers.cookie?
     headers.cookie = req.headers.cookie
@@ -139,7 +140,10 @@ generatePayment = (payment, dataPath, req, res) ->
       else
         res.send 400, 'Bad request'
     else
-      payment.data = results.data
+      if is_prepayment
+        payment.data = results
+      else
+        payment.data = results.data
       
       res.writeHead 200, pdfHeaders(payment.fileName())
       payment.output(res)
