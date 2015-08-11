@@ -1,5 +1,6 @@
 Report = require './report'
 moment = require 'moment'
+timeFormat  = require 'time-format-utils'
 
 RAD = Math.PI / 180
 COLORS = ['#F2C5FE', '#A18CCA', '#8DE7FE', '#31B4DE',
@@ -56,12 +57,14 @@ class SummaryReport extends Report
           0
 
     # Draw barchart grid
+    LINE_START = 35
+    LINE_END = 540
     @doc.lineWidth(0.5).strokeColor '#e6e6e6'
-    @doc.moveTo(35, 5).lineTo(540, 5).dash(1, space: 1).stroke()
-    @doc.moveTo(35, 35).lineTo(540, 35).dash(1, space: 1).stroke()
-    @doc.moveTo(35, 65).lineTo(540, 65).dash(1, space: 1).stroke()
-    @doc.moveTo(35, 95).lineTo(540, 95).dash(1, space: 1).stroke()
-    @doc.moveTo(35, 145).lineTo(540, 145).dash(1, space: 1).stroke()
+    @doc.moveTo(LINE_START, 5).lineTo(LINE_END, 5).dash(1, space: 1).stroke()
+    @doc.moveTo(LINE_START, 35).lineTo(LINE_END, 35).dash(1, space: 1).stroke()
+    @doc.moveTo(LINE_START, 65).lineTo(LINE_END, 65).dash(1, space: 1).stroke()
+    @doc.moveTo(LINE_START, 95).lineTo(LINE_END, 95).dash(1, space: 1).stroke()
+    @doc.moveTo(LINE_START, 145).lineTo(LINE_END, 145).dash(1, space: 1).stroke()
 
     yAxisText = (val) ->
       if val > 10
@@ -81,10 +84,11 @@ class SummaryReport extends Report
     PADDING_LEFT = 45
     MIN_BAR_WIDTH = 12
     MAX_BAR_HEIGHT = 125
+    BAR_GRAPH_WIDTH = LINE_END - LINE_START - 2 * (PADDING_LEFT - LINE_START)
 
     barCount = @data.activity.rows.length
     barWidth = MAX_DAYS / barCount * MIN_BAR_WIDTH
-    barWidthPad = barWidth + BAR_PADDING
+    barWidthPad = barWidth + (BAR_GRAPH_WIDTH - barCount * barWidth) / (barCount-1)
     @doc.font('FontBold').fontSize 8
 
     # Draw barchart bars
@@ -98,9 +102,7 @@ class SummaryReport extends Report
       if barCount <= 16
         time = "#{height.toFixed(2)}"
         if @data.duration_format != 'decimal'
-          hours = Math.floor(height)
-          minutes = Math.floor((height-hours)*60)
-          time = "#{hours}:#{if minutes < 10 then ('0' + minutes) else minutes}"
+          time = timeFormat.secondsToSmallHhmm(height*3600)
         @doc.text time, cx, MAX_BAR_HEIGHT - heights[i] - 15, width: barWidth, align: 'center'
       cx += barWidthPad
 

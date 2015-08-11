@@ -77,10 +77,8 @@ class Report
     console.timeEnd name
 
   displayDuration: (milliseconds) ->
-    displayType = @data.params?.time_format_mode
-    displayType ||= 'classic'
-    result = timeFormat.secondsToExtHhmmss((milliseconds / 1000), displayType)
-    if displayType is 'improved'
+    result = timeFormat.secondsToExtHhmmss((milliseconds / 1000), @data.duration_format)
+    if @data.duration_format is 'improved'
       return result.replace(/<[^>]*>/g, '') # time-format-utils returns some html with the improved type...
     return result
 

@@ -7,9 +7,10 @@ data.params =
   until: '2013-05-05'
   subgrouping: 'time_entries'
   grouping: 'projects'
-  time_format_mode: 'improved'
   tag_names: 'Master, Productive, nobill'
   task_names: 'Top-secret, Trip to Tokio'
+
+data.duration_format = 'decimal'
 
 report = new SummaryReport(data)
 report.output(fs.createWriteStream('summary.pdf'))
