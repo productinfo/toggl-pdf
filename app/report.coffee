@@ -108,7 +108,7 @@ class Report
     try
       @doc.image logo, 480, -2, width: 80
     catch error
-      console.log "IMAGE ERROR", @data.env?.logo
+      console.log "IMAGE ERROR", error
 
     @doc.fontSize(10).text "#{@data.params['since']}  -  #{@data.params['until']}", 35, 35
 
