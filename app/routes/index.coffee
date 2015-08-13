@@ -108,22 +108,20 @@ makeRequest = (queryPath, headers, cb) ->
         cb "API responded with #{res.statusCode} - #{chunks.join('')}", null
 
 
-fetchImage = (data, cb) ->
-  logo = data.logo or data.workspace?.logo
-  return cb(null, data) unless logo?
+fetchImage = (logo, cb) ->
   parts = url.parse logo
   options =
     path: parts.path
     host: parts.host
   request =  https.get options
-  request.on 'error', -> cb(null, data)
+  request.on 'error', (err) -> cb(err, null)
   request.on 'response', (res) ->
     chunks = []
     res.setEncoding('binary')
     res.on 'data', (chunk) -> chunks.push(chunk)
     res.on 'end', ->
       data = new Buffer chunks.join(''), 'binary' if res.statusCode is 200
-      cb null, data
+      cb(null, data)
 
 
 generatePayment = (payment, dataPath, req, res, is_prepayment = false) ->
@@ -176,20 +174,32 @@ generateReport = (report, dataPath, req, res) ->
       report.data = results.data
       report.data.params = params
       report.data.env = results.env
-      report.data.logo = results.logo
       report.data.duration_format = params.time_format_mode || results.env.duration_format || 'improved'
+      logoUrl = results.env.logo
 
-      console.time("  * PDF time")
-      res.writeHead 200, pdfHeaders(report.fileName())
-      report.output(res)
-      
+      processOutput = (err, data) -> 
+        report.data.logo = data?.logo
+        console.time("  * PDF time")
+        res.writeHead 200, pdfHeaders(report.fileName())
+        report.output(res)
+
+      imageCall = logo: (cb) -> fetchImage logoUrl, (err, data) -> cb(err, data)
+
+      if logoUrl?
+        async.parallel imageCall, processOutput
+      else
+        urlCall = url: (cb) -> makeRequest logoPath, headers, (err, data) -> cb(err, data)
+        async.parallel urlCall, (err, data) ->
+          logoUrl = data.url?.logo
+          if logoUrl?
+            async.parallel imageCall, processOutput
+          else
+            processOutput null, null
+
   apiRequests =
     env: (callback) ->
       makeRequest envPath, headers, (err, data) -> callback(err, data)
     data: (callback) ->
       makeRequest dataPath, headers, (err, data) -> callback(err, data)
-    logo: (callback) ->
-      makeRequest logoPath, headers, (err, data) -> 
-        if err? then callback(err, data) else fetchImage(data, callback)
 
   async.parallel apiRequests, makePdf
