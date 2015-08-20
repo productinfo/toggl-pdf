@@ -80,7 +80,6 @@ class SummaryReport extends Report
       @doc.text yAxisText(maxValue * 0.25), 550, 90, width: 0
 
     MAX_DAYS = 31
-    BAR_PADDING = 4
     PADDING_LEFT = 45
     MIN_BAR_WIDTH = 12
     MAX_BAR_HEIGHT = 125
@@ -88,7 +87,10 @@ class SummaryReport extends Report
 
     barCount = @data.activity.rows.length
     barWidth = MAX_DAYS / barCount * MIN_BAR_WIDTH
-    barWidthPad = barWidth + (BAR_GRAPH_WIDTH - barCount * barWidth) / (barCount-1)
+    if barCount==1
+      PADDING_LEFT = PADDING_LEFT + (BAR_GRAPH_WIDTH - barWidth)/2
+    pad = if barCount > 1 then (BAR_GRAPH_WIDTH - barCount * barWidth) / (barCount-1) else 0
+    barWidthPad = barWidth + pad
     @doc.font('FontBold').fontSize 8
 
     # Draw barchart bars
