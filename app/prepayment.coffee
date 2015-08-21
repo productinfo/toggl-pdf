@@ -20,7 +20,7 @@ class Prepayment
     @doc.end()
 
   fileName: ->
-    'toggl-invoice'
+    'toggl-purchase-order'
 
   finalize: ->
     @doc.translate 0, 35
@@ -64,8 +64,8 @@ class Prepayment
     @doc.text @data.company_name, @LEFT, 5
     @doc.font('FontRegular').fontSize 7
     @doc.text "#{@data.company_address} #{(if @data.country_name? then @data.country_name else '')}", @LEFT, 18
-    @doc.text @data.contact_person, @LEFT, 28
-    @doc.text @data.vat_number, @LEFT, 38
+    @doc.text((if @data.contact_person? then @data.contact_person else ''), @LEFT, 28)
+    @doc.text((if @data.vat_valid then @data.vat_number else ''), @LEFT, 38)
     @doc.font('FontRegular').fontSize 7
     @doc.text createdAt.format('MMMM D, YYYY'), 458, 20, align: 'right', width: 100
     @doc.text @status(), 458, 30, align: 'right', width: 100
@@ -125,7 +125,7 @@ class Prepayment
       amount
 
   vatPercentage: ->
-    if @data.vat_valid && @data.country_id != 69 # 60 == Estonia, special case
+    if @data.vat_valid && @data.country_id != 69 # 69 == Estonia, special case
       0
     else
       @data.vat_percentage
