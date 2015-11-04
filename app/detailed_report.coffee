@@ -84,7 +84,9 @@ class DetailedReport extends Report
         @doc.text start.format('HH:mm') + '-' + stop.format('HH:mm'), 405, 20
       @doc.fillColor('black')
       if row.is_billable && !@isFree()
-        @doc.text row.billable + ' ' + row.cur, 465, 20
+        value = if row.billable? then "#{row.billable}" else ''
+        value += if row.cur? then " #{row.cur}" else ''
+        @doc.text value, 465, 20
 
       @doc.lineWidth(0.5).moveTo(@LEFT, 35).lineTo(550, 35).stroke(1)
       @translate 0, 32
