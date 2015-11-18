@@ -64,7 +64,7 @@ class DetailedReport extends Report
       duration    = @displayDuration(row.dur)
       @doc.font 'FontBold'
       @doc.text "#{start.format('MM-DD')}", @LEFT, 7
-      @doc.text description, 65, 9, { width: 330, lineCap: lineCount }
+      @doc.text description, 65, 7, { width: 330, lineCap: lineCount }
       @doc.text duration, 405, 7
       @doc.font 'FontRegular'
       @doc.text row.user, 465, 7, width: 120, height: 11
