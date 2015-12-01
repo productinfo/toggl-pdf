@@ -28,7 +28,7 @@
         {  
           "uid":426060,
           "title":{  
-            "user":"Emma"
+            "user":"Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma Emma"
           },
           "totals":[  
             null,
@@ -79,6 +79,76 @@
       ]
     },
     {  
+      "title":{
+        "client":"Important Client",
+        "project":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "pid":4880896,
+      "totals":[
+        13440000,
+        9300000,
+        null,
+        null,
+        null,
+        null,
+        null,
+        22740000
+      ],
+      "details":[
+        {
+          "uid":426060,
+          "title":{
+            "user":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "totals":[
+            13440000,
+            9300000,
+            null,
+            null,
+            null,
+            null,
+            null,
+            22740000
+          ]
+        }
+      ]
+    },
+    {
+      "title":{
+        "client":"Important Client",
+        "project":"a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"
+      },
+      "pid":4880896,
+      "totals":[
+        13440000,
+        9300000,
+        null,
+        null,
+        null,
+        null,
+        null,
+        22740000
+      ],
+      "details":[
+        {
+          "uid":426060,
+          "title":{
+            "user":"b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b"
+          },
+          "totals":[
+            13440000,
+            9300000,
+            null,
+            null,
+            null,
+            null,
+            null,
+            22740000
+          ]
+        }
+      ]
+    },
+    {
       "title":{  
         "client":"Gym AB",
         "project":"Self-Defense classes"
@@ -256,7 +326,7 @@
     {  
       "title":{  
         "client":null,
-        "project":"ケコサザシジスセソタダチ"
+        "project":"ケコサザシジスセソタダチ Foo Factory Foo Factory Foo Factory Foo Factory Foo Factory Foo Factory Foo Factory Foo Factory"
       },
       "pid":3032158,
       "totals":[  

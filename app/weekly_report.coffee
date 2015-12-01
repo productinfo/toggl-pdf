@@ -4,6 +4,7 @@ moment = require 'moment'
 class WeeklyReport extends Report
   constructor: (@data) ->
     @LEFT = 35
+    @DESCRIPTION_WIDTH = 200
     super @data
 
   finalize: ->
@@ -73,10 +74,12 @@ class WeeklyReport extends Report
       @doc.text @slotDuration(slot), 250 + idx * 40, 1, width: 0
 
   drawRow: (row) ->
-    @doc.text @rowTitle(row.title), @LEFT, 1
+    description = @rowTitle(row.title)
+    lineCount = Math.ceil(description.length / 46)
+    @doc.text description, @LEFT, 1, width: @DESCRIPTION_WIDTH
     for slot, i in row.totals
-       @drawCells(slot, i) 
-    @translate 0, 15
+       @drawCells(slot, i)
+    @translate 0, lineCount * 15
     if @posY > Report.PAGE_HEIGHT - Report.MARGIN_BOTTOM
       @addPage()
       @translate 0, 30
