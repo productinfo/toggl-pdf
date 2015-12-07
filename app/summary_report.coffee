@@ -3,8 +3,11 @@ moment = require 'moment'
 timeFormat  = require 'time-format-utils'
 
 RAD = Math.PI / 180
-COLORS = ['#F2C5FE', '#A18CCA', '#8DE7FE', '#31B4DE',
-  '#DDCAB1', '#8E4F00', '#DB8820', '#404775']
+COLORS = [
+  "#4dc3ff", "#bc85e6", "#df7baa", "#f68d38", "#b27636",
+  "#8ab734", "#14a88e", "#268bb5", "#6668b4", "#a4506c",
+  "#67412c", "#3c6526", "#094558", "#bc2d07", "#999999"
+]
 
 class SummaryReport extends Report
   finalize: ->
@@ -154,32 +157,46 @@ class SummaryReport extends Report
     if part is 'subgrouping'
       subgroups = {}
       for group, i in @data.data
+        groupColor = getColor group.title
         for item, i in group.items
           title = (getTitle item.title)
-          subgroups[title] = 0 unless subgroups[title]?
-          subgroups[title] += item.time
+          unless subgroups[title]?
+            subgroups[title] =
+              name:
+                time_entry: title
+                hex_color: groupColor
+              time: item.time
 
-      filterOthers(time, name, 0.05) for name, time of subgroups
+          else
+            subgroups[title].time += item.time
+
+      filterOthers(obj.time, obj.name, 0.05) for title, obj of subgroups
     else
-      filterOthers(time, name, 0.06) for {time: time, title: name} in @data.data
+      filterOthers(time, name, 0.06) for {time, title: name} in @data.data
 
     groups.sort (a, b) -> b.time - a.time
-    groups.push {name: 'Other', time: otherTotal} if otherTotal > 0
+
+    if otherTotal > 0
+      groups.push
+        name:
+          time_entry: 'Other'
+          hex_color: '#D3D3D3'
+        time: otherTotal
 
     # Donut chart
     angle = 90
-    for group, i in groups
+    for group in groups
       angleplus = 360 * group.time / @data.total_grand
       path = @sector 150, 130, 100, angle, angle + angleplus
-      @doc.path(path.join(', ')).fill COLORS[i]
+      @doc.path(path.join(', ')).fill getColor group.name
       angle += angleplus
     @doc.circle(150, 130, 40).fill "#fff"
 
     # Donut labels
     @doc.fontSize 10
     cy = 255
-    for group, i in groups
-      @doc.circle(63, cy, 8).fill COLORS[i]
+    for group in groups
+      @doc.circle(63, cy, 8).fill getColor group.name
       title = getTitle group.name
       groupName = if title.length > 30
         title.substr(0, 25) + '...'
@@ -207,6 +224,14 @@ class SummaryReport extends Report
         return '-'
     else
       return title or '(no title)'
+
+  getColor = (title) ->
+    if typeof title is 'object'
+      if title.hex_color
+        return title.hex_color
+      if title.color
+        return COLORS[title.color]
+    return '#999999'
 
   reportTable: ->
     @translate 0, 20

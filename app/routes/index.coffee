@@ -155,7 +155,7 @@ generateReport = (report, dataPath, req, res) ->
   if req.headers.authorization?
     headers.authorization = req.headers.authorization
   params    = querystring.parse parsedURL.query
-  dataPath  = dataPath + "?view=print&string_title=true&bars_count=31&#{parsedURL.query}"
+  dataPath  = dataPath + "?view=print&bars_count=31&#{parsedURL.query}"
   logoPath  = getApiV9Url "#{params['workspace_id']}/logo"
 
   if params.bookmark_token
