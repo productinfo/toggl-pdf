@@ -170,7 +170,6 @@ class SummaryReport extends Report
           else
             subgroups[title].time += item.time
 
-      console.log subgroups
       filterOthers(obj.time, obj.name, 0.05) for title, obj of subgroups
     else
       filterOthers(time, name, 0.06) for {time, title: name} in @data.data
