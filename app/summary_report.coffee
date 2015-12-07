@@ -231,7 +231,7 @@ class SummaryReport extends Report
         return title.hex_color
       if title.color
         return COLORS[title.color]
-    return '#4dc3ff'
+    return '#999999'
 
   reportTable: ->
     @translate 0, 20
