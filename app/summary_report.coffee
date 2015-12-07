@@ -175,7 +175,13 @@ class SummaryReport extends Report
       filterOthers(time, name, 0.06) for {time, title: name} in @data.data
 
     groups.sort (a, b) -> b.time - a.time
-    groups.push {name: 'Other', time: otherTotal} if otherTotal > 0
+
+    if otherTotal > 0
+      groups.push
+        name:
+          time_entry: 'Other'
+          hex_color: '#D3D3D3'
+        time: otherTotal
 
     # Donut chart
     angle = 90
