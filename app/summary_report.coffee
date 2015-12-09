@@ -215,13 +215,14 @@ class SummaryReport extends Report
         return title.user
       if title.project
         if title.client
-          return title.project + ' - ' +title.client
+          return title.project + ' - ' + title.client
         else
           return title.project
       if title.client
         return title.client
-      else
-        return '-'
+      if 'task' of title # even if `null`!
+        return title.task or '(no task)'
+      return '-'
     else
       return title or '(no title)'
 
