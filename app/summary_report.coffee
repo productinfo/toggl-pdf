@@ -272,7 +272,7 @@ class SummaryReport extends Report
         @translate 0, 20
 
         # If the we have multiline description then lets move the lines down
-        @translate 0, lineCount * 9 if lineCount > 0
+        @translate 0, 13 * Math.ceil lineCount if lineCount > 1
 
         if @posY > Report.PAGE_HEIGHT - Report.MARGIN_BOTTOM
           @doc.text ++@pageNum
