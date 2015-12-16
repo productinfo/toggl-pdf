@@ -77,7 +77,9 @@ class DetailedReport extends Report
       rowProject += row.project or '(no project)'
       rowProject += " - #{row.task}" if row.task?
       rowProject += " - [#{row.tags.join(', ')}]" if row.tags.length > 0
-      @doc.text rowProject?.slice(0, 90), 65, 22, width: 330, height: 11
+      lineCount = rowProject.length / 90
+
+      @doc.text rowProject, 65, 22, width: 330
 
       if row.use_stop
         stop = if row.end? then moment(row.end[...TSIZE]) else moment()
@@ -88,6 +90,7 @@ class DetailedReport extends Report
         value += if row.cur? then " #{row.cur}" else ''
         @doc.text value, 465, 20
 
+      @translate 0, 11 * lineCount
       @doc.lineWidth(0.5).moveTo(@LEFT, 35).lineTo(550, 35).stroke(1)
       @translate 0, 32
       if @posY > Report.PAGE_HEIGHT - Report.MARGIN_BOTTOM
