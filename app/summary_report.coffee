@@ -11,6 +11,8 @@ COLORS = [
 
 class SummaryReport extends Report
   finalize: ->
+    @colorShift = Math.floor Math.random() * COLORS.length
+
     @translate 0, 50
     @reportHeader('Summary report')
 
@@ -157,7 +159,7 @@ class SummaryReport extends Report
     if part is 'subgrouping'
       subgroups = {}
       for group, i in @data.data
-        groupColor = getColor group.title
+        groupColor = getColor group.title, i + @colorShift
         for item, i in group.items
           title = (getTitle item.title)
           unless subgroups[title]?
@@ -185,18 +187,18 @@ class SummaryReport extends Report
 
     # Donut chart
     angle = 90
-    for group in groups
+    for group, i in groups
       angleplus = 360 * group.time / @data.total_grand
       path = @sector 150, 130, 100, angle, angle + angleplus
-      @doc.path(path.join(', ')).fill getColor group.name
+      @doc.path(path.join(', ')).fill getColor group.name, i + @colorShift
       angle += angleplus
     @doc.circle(150, 130, 40).fill "#fff"
 
     # Donut labels
     @doc.fontSize 10
     cy = 255
-    for group in groups
-      @doc.circle(63, cy, 8).fill getColor group.name
+    for group, i in groups
+      @doc.circle(63, cy, 8).fill getColor group.name, i + @colorShift
       title = getTitle group.name
       groupName = if title.length > 30
         title.substr(0, 25) + '...'
@@ -226,12 +228,14 @@ class SummaryReport extends Report
     else
       return title or '(no title)'
 
-  getColor = (title) ->
+  getColor = (title, i) ->
     if typeof title is 'object'
       if title.hex_color
         return title.hex_color
       if title.color
         return COLORS[title.color]
+      if title.user
+        return COLORS[i % COLORS.length]
     return '#999999'
 
   reportTable: ->
