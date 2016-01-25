@@ -87,13 +87,13 @@ class Prepayment
   tableFooter: ->
     alignOpts = align: 'right', width: 60
     @doc.text 'Amount', 440, 1
-    @doc.text "#{@price().toFixed(2)} USD", 490, 1, alignOpts
+    @doc.text "$ #{@price().toFixed(2)} USD", 490, 1, alignOpts
 
     @doc.text "VAT #{@vatPercentage()}%", 440, 15
-    @doc.text "#{@vatAmount().toFixed(2)} USD", 490, 15, alignOpts
+    @doc.text "$ #{@vatAmount().toFixed(2)} USD", 490, 15, alignOpts
 
     @doc.font('FontBold').text "Total", 440, 30
-    @doc.text "#{@totalPrice().toFixed(2)} USD", 490, 30, alignOpts
+    @doc.text "$ #{@totalPrice().toFixed(2)} USD", 490, 30, alignOpts
 
   pageFooter: ->
     @doc.font('FontRegular')
