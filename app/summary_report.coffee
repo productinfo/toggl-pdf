@@ -166,7 +166,7 @@ class SummaryReport extends Report
             subgroups[title] =
               name:
                 time_entry: title
-                hex_color: groupColor
+                hex_color: unless isClient(group.title) then groupColor else nextColor i
               time: item.time
 
           else
@@ -228,14 +228,22 @@ class SummaryReport extends Report
     else
       return title or '(no title)'
 
+  isClient = (title) ->
+    typeof title is 'object' and title.client and Object.keys(title).length is 1
+
+  nextColor = (i) ->
+    COLORS[i % COLORS.length]
+
   getColor = (title, i) ->
     if typeof title is 'object'
+      if isClient title
+        return nextColor i
       if title.hex_color
         return title.hex_color
       if title.color
         return COLORS[title.color]
       if title.user
-        return COLORS[i % COLORS.length]
+        return nextColor i
     return '#999999'
 
   reportTable: ->
