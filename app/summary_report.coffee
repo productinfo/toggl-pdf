@@ -229,7 +229,7 @@ class SummaryReport extends Report
       return title or '(no title)'
 
   isClient = (title) ->
-    typeof title is 'object' and title.client and Object.keys(title).length is 1
+    typeof title is 'object' and title.client isnt undefined and Object.keys(title).length is 1
 
   nextColor = (i) ->
     COLORS[i % COLORS.length]
