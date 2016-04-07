@@ -1,6 +1,7 @@
 url         = require 'url'
-async       = require 'async'
+http        = require 'http'
 https       = require 'https'
+async       = require 'async'
 bugsnag     = require 'bugsnag'
 querystring = require 'querystring'
 
@@ -78,14 +79,23 @@ pdfHeaders = (filename) ->
   'Content-Type': 'application/pdf'
   'Content-Disposition': "attachment; filename=#{filename}.pdf"
 
-makeRequest = (queryPath, headers, cb) ->
-  apiHost = process.env.API_HOST or 'www.toggl.com'
-  options =
-    path: queryPath
-    hostname: apiHost
-    headers: headers
+makeApiRequest = (queryPath, headers, cb) ->
+  makeRequest process.env.API_HOST, queryPath, headers, cb
 
-  request = https.get options
+makeReportsRequest = (queryPath, headers, cb) ->
+  makeRequest process.env.REPORTS_API_HOST, queryPath, headers, cb
+
+makeRequest = (apiHost = 'https://www.toggl.com', queryPath, headers, cb) ->
+  {protocol, hostname, port} = url.parse apiHost
+
+  options = {
+    headers
+    hostname
+    path: queryPath
+  }
+  options.port = port if port
+
+  request = (if protocol.match /^https/ then https else http).get options
   request.on 'error', -> cb("API responsed with error", null)
   request.on 'response', (res) ->
     chunks = []
@@ -130,7 +140,7 @@ generatePayment = (payment, dataPath, req, res, is_prepayment = false) ->
     headers.cookie = req.headers.cookie
   if req.headers.authorization?
     headers.authorization = req.headers.authorization
-  makeRequest dataPath, headers, (err, results) ->
+  makeApiRequest dataPath, headers, (err, results) ->
     if err?
       console.log "generatePayment FAILED", dataPath, err
       if err.indexOf("API responded with 403") > -1
@@ -142,7 +152,7 @@ generatePayment = (payment, dataPath, req, res, is_prepayment = false) ->
         payment.data = results
       else
         payment.data = results.data
-      
+
       res.writeHead 200, pdfHeaders(payment.fileName())
       payment.output(res)
 
@@ -177,7 +187,7 @@ generateReport = (report, dataPath, req, res) ->
       report.data.duration_format = params.time_format_mode || results.env.duration_format || 'improved'
       logoUrl = results.env.logo
 
-      processOutput = (err, data) -> 
+      processOutput = (err, data) ->
         report.data.logo = data?.logo
         console.time("  * PDF time")
         res.writeHead 200, pdfHeaders(report.fileName())
@@ -188,7 +198,7 @@ generateReport = (report, dataPath, req, res) ->
       if logoUrl?
         async.parallel imageCall, processOutput
       else
-        urlCall = url: (cb) -> makeRequest logoPath, headers, (err, data) -> cb(err, data)
+        urlCall = url: (cb) -> makeApiRequest logoPath, headers, (err, data) -> cb(err, data)
         async.parallel urlCall, (err, data) ->
           logoUrl = data.url?.logo
           if logoUrl?
@@ -198,8 +208,8 @@ generateReport = (report, dataPath, req, res) ->
 
   apiRequests =
     env: (callback) ->
-      makeRequest envPath, headers, (err, data) -> callback(err, data)
+      makeReportsRequest envPath, headers, callback
     data: (callback) ->
-      makeRequest dataPath, headers, (err, data) -> callback(err, data)
+      makeApiRequest dataPath, headers, callback
 
   async.parallel apiRequests, makePdf
