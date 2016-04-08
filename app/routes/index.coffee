@@ -210,6 +210,6 @@ generateReport = (report, dataPath, req, res) ->
     env: (callback) ->
       makeReportsRequest envPath, headers, callback
     data: (callback) ->
-      makeApiRequest dataPath, headers, callback
+      makeReportsRequest dataPath, headers, callback
 
   async.parallel apiRequests, makePdf
