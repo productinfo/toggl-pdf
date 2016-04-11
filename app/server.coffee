@@ -24,5 +24,10 @@ app.get "/workspaces/:workspace_id/payments/:id.pdf", routes.getPayment
 app.get "/workspaces/:workspace_id/prepayments/:id.pdf", routes.getPrepayment
 
 server = http.createServer(app).listen app.get('port'), ->
-  console.log('Server at http://127.0.0.1:' + app.get 'port')
+  console.log 'Server at http://127.0.0.1:' + app.get('port'), 'started with conf:', JSON.stringify {
+    API_HOST: process.env.API_HOST or 'https://www.toggl.com'
+    REPORTS_API_HOST: process.env.REPORTS_API_HOST or 'https://www.toggl.com'
+    NODE_ENV: process.env.NODE_ENV or 'none'
+  }, null, 2
+
 server.timeout = 29000
