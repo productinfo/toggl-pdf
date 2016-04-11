@@ -1,6 +1,6 @@
 Report = require './report'
 moment = require 'moment'
-timeFormat  = require 'time-format-utils'
+timeFormat = require 'time-format-utils'
 
 RAD = Math.PI / 180
 COLORS = [
@@ -8,6 +8,29 @@ COLORS = [
   "#8ab734", "#14a88e", "#268bb5", "#6668b4", "#a4506c",
   "#67412c", "#3c6526", "#094558", "#bc2d07", "#999999"
 ]
+
+# keeps own state; returns function that takes HEX color and returns it shaded
+getShader = ->
+  dict = {}
+
+  # from: http://stackoverflow.com/a/13542669/390493
+  shade = (color, percent) ->
+    f = parseInt(color.slice(1), 16)
+    t = if percent < 0 then 0 else 255
+    p = if percent < 0 then percent * -1 else percent
+    R = f >> 16
+    G = f >> 8 & 0x00FF
+    B = f & 0x0000FF
+    '#' + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + Math.round((t - B) * p) + B).toString(16).slice(1)
+
+  getCount = (color) ->
+    x = dict[color] or 0
+    dict[color] = x + 1
+    x
+
+  return (color) ->
+    shade color, getCount(color.toLowerCase()) / 5
+
 
 class SummaryReport extends Report
   finalize: ->
@@ -184,6 +207,11 @@ class SummaryReport extends Report
           time_entry: 'Other'
           hex_color: '#D3D3D3'
         time: otherTotal
+
+    if part is 'subgrouping'
+      shade = getShader()
+      for x in groups
+        x.name.hex_color = shade x.name.hex_color
 
     # Donut chart
     angle = 90
