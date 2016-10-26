@@ -97,7 +97,8 @@ class Prepayment
 
   pageFooter: ->
     @doc.font('FontRegular')
-    @doc.text 'Thank you!', 510, 1, width: 0
+    @doc.text 'All bank fees must be paid by a sender.', 405, 1, width: 0
+    @doc.text 'Thank you!', 510, 15, width: 0
 
     @doc.font('FontBold').text 'Bank details:', @LEFT, 1, align: 'left', width: 0
     @doc.font('FontRegular').fontSize(8)
