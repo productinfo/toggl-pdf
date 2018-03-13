@@ -12,8 +12,8 @@ app = express()
 app.set 'port', process.env.PORT || 8900
 app.use bugsnag.requestHandler
 app.use morgan('combined')
-app.use routes.notFound
-app.use routes.internalError
+#app.use routes.notFound
+#app.use routes.internalError
 
 app.get "/status", routes.getStatus
 app.get "/reports/api/v2/summary.pdf", routes.getSummary

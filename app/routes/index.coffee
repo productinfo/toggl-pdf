@@ -47,7 +47,7 @@ exports.getStatus = (req, res) ->
   res.end 'OK'
 
 exports.notFound = (req, res, next) ->
-  res.writeHead 400, 'Content-Type': 'text/plain'
+  res.writeHead 404, 'Content-Type': 'text/plain'
   res.end 'This is not the page you are looking for!'
 
 exports.internalError = (err, req, res, next) ->
