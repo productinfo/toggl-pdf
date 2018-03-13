@@ -46,7 +46,7 @@ class Invoice
 
   drawHeader: ->
     @doc.image __dirname + '/images/toggl.png', 35, 5, fit: [98, 40]
-    @doc.text 'Invoice from Toggl LLC', 135, 10
+    @doc.text 'Invoice from Toggl OÜ', 135, 10
     @doc.text 'Ravala 8 10143 Tallinn, Estonia', 135, 20
     @doc.text 'VAT: EE101124102', 135, 30
     @doc.text 'www.toggl.com', 470, 15, align: 'right', width: 75
