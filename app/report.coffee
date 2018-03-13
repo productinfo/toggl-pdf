@@ -16,8 +16,8 @@ class Report
     @initFonts()
 
   initFonts: ->
-    @doc.registerFont('FontRegular', __dirname + '/fonts/NotoSansIPAexg-Regular.ttf', 'NotoSans-Regular')
-    @doc.registerFont('FontBold', __dirname + '/fonts/NotoSansIPAexg-Bold.ttf', 'NotoSansToggl-Bold')
+    @doc.registerFont('FontRegular', __dirname + '/fonts/NotoSansIPAexg-Regular.ttf')
+    @doc.registerFont('FontBold', __dirname + '/fonts/NotoSansIPAexg-Bold.ttf')
     @doc.font('FontRegular').fontSize(7)
 
   output: (stream) ->

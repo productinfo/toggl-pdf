@@ -10,8 +10,8 @@ class Invoice
     @LEFT = 35
 
   initFonts: ->
-    @doc.registerFont('FontRegular', __dirname + '/fonts/NotoSans-Regular.ttf', 'Noto Sans')
-    @doc.registerFont('FontBold', __dirname + '/fonts/NotoSans-Bold.ttf', 'Noto Sans Bold')
+    @doc.registerFont('FontRegular', __dirname + '/fonts/NotoSans-Regular.ttf')
+    @doc.registerFont('FontBold', __dirname + '/fonts/NotoSans-Bold.ttf')
     @doc.font('FontRegular').fontSize(7)
 
   output: (stream) ->
