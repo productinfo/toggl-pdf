@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "pdfkit": "~0.7.0",
     "async": "*",
-    "moment": "~2.1.0",
-    "express": "~3.20.2",
-    "bugsnag": "~1.1.5",
+    "bugsnag": "~2.3.0",
+    "express": "~4.16.3",
+    "moment": "~2.21.0",
+    "morgan": "^1.9.0",
+    "pdfkit": "~0.8.3",
     "time-format-utils": "~1.0.3"
   }
 }

@@ -2,6 +2,7 @@ http    = require 'http'
 path    = require 'path'
 express = require 'express'
 bugsnag = require 'bugsnag'
+morgan  = require('morgan')
 routes  = require './routes'
 
 if process.env.BUGSNAG_KEY
@@ -10,8 +11,7 @@ if process.env.BUGSNAG_KEY
 app = express()
 app.set 'port', process.env.PORT || 8900
 app.use bugsnag.requestHandler
-app.use express.logger 'dev'
-app.use app.router
+app.use morgan('combined')
 app.use routes.notFound
 app.use routes.internalError
 
