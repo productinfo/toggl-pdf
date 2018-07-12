@@ -1,6 +1,13 @@
 COPIED_OUTPUT := $(patsubst app/%,dist/%, $(shell find app/images/ app/fonts -type f -name '*'))
 OUTPUTJSFILES = $(patsubst app/%.coffee, dist/%.js, $(shell find app/ -type f -name '*.coffee'))
 
+OPEN_CMD :=
+ifeq ($(shell uname -s),Darwin)
+	OPEN_CMD += open
+else
+	OPEN_CMD += xdg-open
+endif
+
 default: s
 
 run:
@@ -46,25 +53,25 @@ clean:
 	@rm -f *.pdf
 
 i:
-	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && open invoice.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && $(OPEN_CMD) invoice.pdf
 
 p:
-	@coffee --nodejs --stack_size=4096 testdata/test_payment.coffee && open payment.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_payment.coffee && $(OPEN_CMD) payment.pdf
 
 s:
-	@coffee --nodejs --stack_size=4096 testdata/test_summary.coffee && open summary.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_summary.coffee && $(OPEN_CMD) summary.pdf
 
 d:
-	@coffee --nodejs --stack_size=4096 testdata/test_detailed.coffee && open detailed.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_detailed.coffee && $(OPEN_CMD) detailed.pdf
 
 w:
-	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && open weekly.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_weekly.coffee && $(OPEN_CMD) weekly.pdf
 
 we:
-	@coffee --nodejs --stack_size=4096 testdata/test_weekly_earnings.coffee && open weekly_earnings.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_weekly_earnings.coffee && $(OPEN_CMD) weekly_earnings.pdf
 
 pre:
-	@coffee --nodejs --stack_size=4096 testdata/test_prepayment.coffee && open prepayment.pdf
+	@coffee --nodejs --stack_size=4096 testdata/test_prepayment.coffee && $(OPEN_CMD) prepayment.pdf
 
 test: clean
 	@coffee --nodejs --stack_size=4096 testdata/test_invoice.coffee && file invoice.pdf | grep PDF && true
