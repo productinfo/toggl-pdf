@@ -126,10 +126,7 @@ class Prepayment
       amount
 
   vatPercentage: ->
-    if @data.vat_valid && @data.country_id != 69 # 69 == Estonia, special case
-      0
-    else
-      @data.vat_percentage
+    @data.vat_percentage
 
   vatAmount: ->
     if @vatPercentage() > 0
@@ -138,9 +135,6 @@ class Prepayment
       0
 
   totalPrice: ->
-    if @vatPercentage() > 0
-      @price() + @price() * @vatPercentage() / 100.0
-    else
-      @price()
+    @price() + @vatAmount()
 
 module.exports = Prepayment
