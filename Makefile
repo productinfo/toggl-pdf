@@ -14,7 +14,7 @@ run:
 	@coffee --nodejs --stack_size=4096 app/server.coffee
 
 vendor:
-	cd dist && tar cvfz toggl_pdf.tgz *
+	cd dist && tar cvfz toggl_pdf.tgz * .nvmrc
 	mv dist/toggl_pdf.tgz toggl_pdf.tgz
 
 vendor_staging: vendor
@@ -23,7 +23,7 @@ vendor_staging: vendor
 vendor_production: vendor
 	rsync -avz -e "ssh -p 22" toggl_pdf.tgz toggl@office.toggl.com:/var/www/office/appseed/toggl_pdf/production.tgz
 
-release: $(COPIED_OUTPUT) dist/package.json coffee node_modules
+release: $(COPIED_OUTPUT) dist/package.json dist/.nvmrc coffee node_modules
 	@echo > /dev/null
 
 node_modules: dist
@@ -31,6 +31,9 @@ node_modules: dist
 
 coffee: $(OUTPUTJSFILES)
 	@echo > /dev/null
+
+dist/.nvmrc: .nvmrc
+	@cp .nvmrc dist/.nvmrc
 
 dist/%.js: app/%.coffee
 	@coffee -co $(@D) $<
