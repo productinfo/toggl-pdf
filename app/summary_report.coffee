@@ -275,6 +275,7 @@ class SummaryReport extends Report
     return '#999999'
 
   reportTable: ->
+    @logRows()
     @translate 0, 20
     @doc.fontSize(7)
     @doc.font('FontBold').fill '#6f7071'
@@ -319,5 +320,12 @@ class SummaryReport extends Report
           @doc.text ++@pageNum
           @addPage()
           @translate 0, 20
+
+  logRows: () ->
+    groupCount = @data.data.length
+    subGroupCount = 0
+    for group in @data.data
+      subGroupCount = subGroupCount + group.items.length
+    console.log("Size of summary report: #{groupCount + subGroupCount} rows")
 
 module.exports = SummaryReport
