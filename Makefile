@@ -18,10 +18,10 @@ vendor:
 	mv dist/toggl_pdf.tgz toggl_pdf.tgz
 
 vendor_staging: vendor
-	rsync -avz -e "ssh -p 22" toggl_pdf.tgz toggl@office.toggl.com:/var/www/office/appseed/toggl_pdf/staging.tgz
+	rsync -avz -e "ssh -p 22" toggl_pdf.tgz toggl@appseed.toggl.space:/var/www/office/appseed/toggl_pdf/staging.tgz
 
 vendor_production: vendor
-	rsync -avz -e "ssh -p 22" toggl_pdf.tgz toggl@office.toggl.com:/var/www/office/appseed/toggl_pdf/production.tgz
+	rsync -avz -e "ssh -p 22" toggl_pdf.tgz toggl@appseed.toggl.space:/var/www/office/appseed/toggl_pdf/production.tgz
 
 release: $(COPIED_OUTPUT) dist/package.json dist/.nvmrc coffee node_modules
 	@echo > /dev/null
